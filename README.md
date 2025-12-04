@@ -54,8 +54,8 @@
 git clone https://github.com/Crypt0mnesia/Diplom_1
 cd DipLom_1
 python -m venv .venv
-source .venv/bin/activate  # Linux/MacOS
-.venv\Scripts\activate     # Windows## 
+source .venv/bin/activate  # MacOS/Linux
+.venv\Scripts\activate     # Windows
 ```
 ### 2. Установка зависимостей
 ```bash
@@ -79,13 +79,15 @@ pytest tests/ --cov=praktikum.burger --cov-report=term --cov-fail-under=100
 pytest tests/ --cov=praktikum.burger --cov-report=html
 ```
 ### 4. Просмотр отчета о покрытии 
-
+После генерации HTML отчета откройте файл htmlcov/index.html в браузере:
 ```bash
-# После генерации HTML отчета откройте файл htmlcov/index.html в браузере.
-open htmlcov/index.html
+open htmlcov/index.html  # MacOS
+# или вручную откройте файл в браузере
 ```
 
-Автор: Ольга Песоцкая
+**Автор: Ольга Песоцкая**
+
 Курс: Яндекс Практикум, "Инженер по тестированию: от новичка до автоматизатора", 32 когорта
+
 Дата: Декабрь 2025
 
