@@ -14,7 +14,7 @@
 **`praktikum/`** - пакет с исходным кодом программы
 - `__init__.py`
 - `bun.py` - класс Bun (булочка)
-- `burger.py` - класс Burger (основной тестируемый класс, 32 строки кода)
+- `burger.py` - класс Burger (основной тестируемый класс)
 - `database.py` - класс Database (база данных)
 - `ingredient.py` - класс Ingredient (ингредиент)
 - `ingredient_types.py` - константы типов ингредиентов
@@ -23,12 +23,15 @@
 - `__init__.py`
 - `test_burger.py` - 15 юнит-тестов для класса Burger
 
-**Основные файлы в корне:**
+*Основные файлы в корне:*
 - `conftest.py` - фикстуры Pytest с мок-объектами
 - `requirements.txt` - зависимости проекта (pytest + pytest-cov)
 - `praktikum.py` - главная программа
 - `README.md` - документация
 - `.gitignore` - игнорируемые файлы
+- 
+*Сгенерированные для проверки:*
+- `htmlcov/` - папка с HTML отчетом о покрытии кода (включена для ревью) 
 
 ## Что протестировано
 Протестированы все 7 методов класса `Burger`:
@@ -78,11 +81,24 @@ pytest tests/ --cov=praktikum.burger --cov-report=term --cov-fail-under=100
 # Генерация HTML отчета
 pytest tests/ --cov=praktikum.burger --cov-report=html
 ```
-### 4. Просмотр отчета о покрытии 
-После генерации HTML отчета откройте файл htmlcov/index.html в браузере:
+### 4. Просмотр отчета о покрытии
+
+**Для ревьюера:** 
+Отчет уже сгенерирован и находится в папке `htmlcov/`. 
+Откройте файл `htmlcov/index.html` в браузере для просмотра.
+
+
+**Примечание:** Папка `htmlcov/` включена в репозиторий специально для проверки ревьюером без необходимости локального запуска тестов.
+
+После самостоятельно генерации HTML отчета откройте файл htmlcov/index.html в браузере:
 ```bash
+# Сгенерировать новый отчет
+pytest tests/ --cov=praktikum.burger --cov-report=html
+
+# Открыть отчет в браузере:
 open htmlcov/index.html  # MacOS
-# или вручную откройте файл в браузере
+start htmlcov/index.html # Windows
+xdg-open htmlcov/index.html # Linux
 ```
 
 **Автор: Ольга Песоцкая**
