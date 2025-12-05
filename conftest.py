@@ -12,8 +12,8 @@ def bun():
 
 
 @pytest.fixture
-def ingredient_sauce():
-    """Фикстура для соуса"""
+def ingredient():
+    """Фикстура ингридиент"""
     mock = Mock()
     mock.get_type.return_value = "SAUCE"
     mock.get_name.return_value = "Тестовый соус"
@@ -22,10 +22,8 @@ def ingredient_sauce():
 
 
 @pytest.fixture
-def ingredient_filling():
-    """Фикстура для начинки"""
-    mock = Mock()
-    mock.get_type.return_value = "FILLING"
-    mock.get_name.return_value = "Тестовая начинка"
-    mock.get_price.return_value = 75
-    return mock
+def burger_with_bun(bun):
+    """Фикстура: бургер с установленной булочкой"""
+    burger = Burger()
+    burger.set_buns(bun)
+    return burger

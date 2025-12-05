@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 from praktikum.burger import Burger
 
 
@@ -7,43 +7,45 @@ class TestBurger:
     """Юнит-тесты для класса Burger"""
 
     # 1. Тест инициализации
-    def test_burger_init(self):
+    def test_burger_init(self, bun):
         burger = Burger()
         assert burger.bun is None
         assert burger.ingredients == []
 
     # 2. Тест установки булочки
-    def test_set_buns(self):
+    def test_set_buns(self, bun):
         burger = Burger()
-        mock_bun = Mock()
-        burger.set_buns(mock_bun)
-        assert burger.bun == mock_bun
+        burger.set_buns(bun)
+        assert burger.bun == bun
 
     # 3. Тест добавления ингредиента
-    def test_add_ingredient(self):
+    def test_add_ingredient(self, bun, ingredient):
         burger = Burger()
-        mock_ingredient = Mock()
-        burger.add_ingredient(mock_ingredient)
+        burger.set_buns(bun)
+        burger.add_ingredient(ingredient)
         assert len(burger.ingredients) == 1
-        assert burger.ingredients[0] == mock_ingredient
+        assert burger.ingredients[0] == ingredient
 
     # 4. Тест удаления ингредиента
-    def test_remove_ingredient(self):
+    def test_remove_ingredient(self, bun, ingredient):
         burger = Burger()
-        mock_ingredient = Mock()
-        burger.add_ingredient(mock_ingredient)
+        burger.set_buns(bun)
+        burger.add_ingredient(ingredient)
         burger.remove_ingredient(0)
         assert len(burger.ingredients) == 0
 
     # 5. Тест удаления с ошибкой
-    def test_remove_ingredient_invalid_index(self):
+    def test_remove_ingredient_invalid_index(self, bun, ingredient):
         burger = Burger()
+        burger.set_buns(bun)
+        burger.add_ingredient(ingredient)
         with pytest.raises(IndexError):
             burger.remove_ingredient(999)
 
     # 6. Тест перемещения ингредиента
-    def test_move_ingredient(self):
+    def test_move_ingredient(self, bun):
         burger = Burger()
+        burger.set_buns(bun)
         mock1, mock2 = Mock(), Mock()
         burger.add_ingredient(mock1)
         burger.add_ingredient(mock2)
@@ -51,10 +53,10 @@ class TestBurger:
         assert burger.ingredients == [mock2, mock1]
 
     # 7. Тест перемещения с ошибкой
-    def test_move_ingredient_invalid_index(self):
+    def test_move_ingredient_invalid_index(self, bun, ingredient):
         burger = Burger()
-        mock = Mock()
-        burger.add_ingredient(mock)
+        burger.set_buns(bun)
+        burger.add_ingredient(ingredient()  )
         with pytest.raises(IndexError):
             burger.move_ingredient(999, 0)
 
@@ -85,22 +87,15 @@ class TestBurger:
             burger.get_price()
 
     # 10. Тест чека
-    def test_get_receipt(self):
+    def test_get_receipt(self, bun, ingredient):
         burger = Burger()
-        mock_bun = Mock()
-        mock_bun.get_name.return_value = "Булочка"
-        burger.set_buns(mock_bun)
+        burger.set_buns(bun)
+        burger.add_ingredient(ingredient)
 
-        mock_ingredient = Mock()
-        mock_ingredient.get_type.return_value = "SAUCE"
-        mock_ingredient.get_name.return_value = "Соус"
-        burger.add_ingredient(mock_ingredient)
-
-        with patch.object(burger, 'get_price', return_value=1000):
-            receipt = burger.get_receipt()
-            assert "Булочка" in receipt
-            assert "sauce Соус" in receipt
-            assert "Price: 1000" in receipt
+        receipt = burger.get_receipt()
+        assert "Тестовая булочка" in receipt
+        assert "sauce Тестовый соус" in receipt
+        assert "Price: 250" in receipt
 
     # 11. Тест чека без булочки
     def test_get_receipt_without_bun(self):
@@ -108,12 +103,12 @@ class TestBurger:
         with pytest.raises(AttributeError):
             burger.get_receipt()
 
-    # 12. Тест чека вызывает get_price
-    def test_get_receipt_calls_get_price(self):
+    # 12. Тест чек  содержит цену из get_price
+    def test_get_receipt_contains_price_from_get_price(self, bun, ingredient):
         burger = Burger()
-        mock_bun = Mock()
-        burger.set_buns(mock_bun)
+        burger.set_buns(bun)
+        burger.add_ingredient(ingredient)
 
-        with patch.object(burger, 'get_price', return_value=1000) as mock_get_price:
-            burger.get_receipt()
-            mock_get_price.assert_called_once()
+        expected_price = burger.get_price()
+        receipt = burger.get_receipt()
+        assert f"Price: {expected_price}" in receipt
